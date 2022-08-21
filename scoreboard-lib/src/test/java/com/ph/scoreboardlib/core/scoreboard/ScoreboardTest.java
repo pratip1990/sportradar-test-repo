@@ -13,6 +13,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import com.ph.scoreboardlib.core.game.Game;
 import com.ph.scoreboardlib.core.game.GameStatus;
 import com.ph.scoreboardlib.core.game.builder.GameBuilder;
+import com.ph.scoreboardlib.core.game.exception.GameCreatationException;
 
 /**
  * @author Pratip
@@ -31,10 +32,11 @@ class ScoreboardTest {
 	
 	/**
 	 * Test method for {@link com.ph.scoreboardlib.core.scoreboard.Scoreboard#createGame(com.ph.scoreboardlib.core.game.Game)}.
+	 * @throws GameCreatationException 
 	 */
 	@Test
 	@Order(2)
-	void testCreateGame() {
+	void testCreateGame() throws GameCreatationException {
 		Game game = new GameBuilder("Germany", "France").status(GameStatus.START).build();
 		Scoreboard scoreboard = Scoreboard.getInstance();
 		boolean actual = scoreboard.createGame(game);

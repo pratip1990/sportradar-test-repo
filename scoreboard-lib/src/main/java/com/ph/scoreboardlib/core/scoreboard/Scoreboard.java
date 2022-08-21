@@ -4,6 +4,8 @@
 package com.ph.scoreboardlib.core.scoreboard;
 
 import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import com.ph.scoreboardlib.core.game.Game;
@@ -43,7 +45,7 @@ public class Scoreboard {
 	}
 	
 	/**
-	 * @param Game
+	 * @param Game New created Game
 	 * @return boolean value true for successfully updated the scoreboard
 	 */
 	public boolean createGame(Game game) {
@@ -57,11 +59,6 @@ public class Scoreboard {
 			System.out.println("Invalid Game Details please check");
 		}
 		return updtFlg;
-	}
-
-	private boolean updateScoreboard(GameStatus start, Game game) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	/**
@@ -78,6 +75,20 @@ public class Scoreboard {
 	 */
 	public boolean finshGame(Game game) {
 		return false;
+	}
+	
+	private boolean updateScoreboard(GameStatus start, Game game) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public Set<Game> get() {
+		Set<Game> temp = new LinkedHashSet<>();
+		scores.forEach(a -> {
+			temp.add(a);
+		});
+		System.out.println(temp);
+		return temp;
 	}
 
 }
