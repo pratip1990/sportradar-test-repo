@@ -33,6 +33,16 @@ public class GameBuilder {
 		this.status = status;
 		return this;
 	}
+	
+	public GameBuilder homeScore(int homeScore) {
+		this.homeScore = homeScore;
+		return this;
+	}
+
+	public GameBuilder awayScore(int awayScore) {
+		this.awayScore = awayScore;
+		return this;
+	}
 
 	public Game build() throws GameCreatationException {
 		Game game = null;

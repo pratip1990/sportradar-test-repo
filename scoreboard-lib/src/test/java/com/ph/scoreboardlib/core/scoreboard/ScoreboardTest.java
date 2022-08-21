@@ -45,16 +45,22 @@ class ScoreboardTest {
 
 	/**
 	 * Test method for {@link com.ph.scoreboardlib.core.scoreboard.Scoreboard#updateGame(com.ph.scoreboardlib.core.game.Game)}.
+	 * @throws GameCreatationException 
 	 */
 	@Test
-	void testUpdateGame() {
-		fail("Not yet implemented");
+	@Order(3)
+	void testUpdateGame() throws GameCreatationException {
+		Game game = new GameBuilder("Germany", "France").status(GameStatus.IN_PROGRESS).homeScore(0).awayScore(1).build();
+		Scoreboard scoreboard = Scoreboard.getInstance();
+		boolean actual = scoreboard.updateGame(game);
+		assertEquals(true, actual);
 	}
 
 	/**
 	 * Test method for {@link com.ph.scoreboardlib.core.scoreboard.Scoreboard#finshGame(com.ph.scoreboardlib.core.game.Game)}.
 	 */
 	@Test
+	@Order(4)
 	void testFinshGame() {
 		fail("Not yet implemented");
 	}

@@ -18,4 +18,9 @@ public class GameUtil {
 		return false;
 	}
 
+	public static boolean validateGameForUpdate(TreeSet<Game> scores, Game game) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -66,7 +66,16 @@ public class Scoreboard {
 	 * @return boolean value true for successfully updated the scoreboard
 	 */
 	public boolean updateGame(Game game) {
-		return false;
+		boolean updtFlg = false;
+		boolean validGameFlg = GameUtil.validateGameForUpdate(scores, game);
+		if (validGameFlg && GameStatus.FINISH != game.getStatus()) {
+			game.setStatus(GameStatus.IN_PROGRESS);
+			updtFlg = updateScoreboard(GameStatus.IN_PROGRESS, game);
+			System.out.println("Game is updated with the new score");
+		} else {
+			System.out.println("Can not update the START Game Status");
+		}
+		return updtFlg;
 	}
 
 	/**
