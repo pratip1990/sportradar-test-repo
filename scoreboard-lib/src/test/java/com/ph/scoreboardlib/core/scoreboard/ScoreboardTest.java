@@ -58,11 +58,15 @@ class ScoreboardTest {
 
 	/**
 	 * Test method for {@link com.ph.scoreboardlib.core.scoreboard.Scoreboard#finshGame(com.ph.scoreboardlib.core.game.Game)}.
+	 * @throws GameCreatationException 
 	 */
 	@Test
 	@Order(4)
-	void testFinshGame() {
-		fail("Not yet implemented");
+	void testFinshGame() throws GameCreatationException {
+		Game game = new GameBuilder("Germany", "France").status(GameStatus.FINISH).build();
+		Scoreboard scoreboard = Scoreboard.getInstance();
+		boolean actual = scoreboard.finshGame(game);
+		assertEquals(true, actual);
 	}
 
 }

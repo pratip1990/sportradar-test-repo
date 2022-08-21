@@ -21,7 +21,7 @@ public class Scoreboard {
 	private static Scoreboard scoreboard;
 	private TreeSet<Game> scores;
 	private ReentrantReadWriteLock lock;
-	
+
 	private Scoreboard() {
 		Comparator<Game> gameComparator = Comparator.comparing(Game::getTotalScore).thenComparing(Game::getUpdateTime)
 				.reversed();
@@ -29,7 +29,7 @@ public class Scoreboard {
 		lock = new ReentrantReadWriteLock();
 	}
 
-	/***
+	/**
 	 * This a thread safe process to create a Scoreboard. Multiple thread can access
 	 * the Scoreboard
 	 * 
@@ -45,9 +45,11 @@ public class Scoreboard {
 		}
 		return scoreboard;
 	}
-	
+
 	/**
-	 * @param Game New created Game
+	 * Use to create new Game (Start a new game)
+	 * 
+	 * @param Game
 	 * @return boolean value true for successfully updated the scoreboard
 	 */
 	public boolean createGame(Game game) {
@@ -64,7 +66,9 @@ public class Scoreboard {
 	}
 
 	/**
+	 * Use to update the scores of existing game
 	 * 
+	 * @param Game
 	 * @return boolean value true for successfully updated the scoreboard
 	 */
 	public boolean updateGame(Game game) {
@@ -81,13 +85,24 @@ public class Scoreboard {
 	}
 
 	/**
+	 * Use to remove the finished game
 	 * 
+	 * @param Game
 	 * @return boolean value true for successfully updated the scoreboard
 	 */
 	public boolean finshGame(Game game) {
-		return false;
+		boolean updtFlg = false;
+		boolean validGameFlg = GameUtil.validateGameForFinish(scores, game);
+		if (validGameFlg) {
+			game.setStatus(GameStatus.FINISH);
+			updtFlg = updateScoreboard(GameStatus.FINISH, game);
+			System.out.println("Game is finished");
+		} else {
+			System.out.println("Invalid Game Details please check");
+		}
+		return updtFlg;
 	}
-	
+
 	private boolean updateScoreboard(GameStatus gameStatus, Game game) {
 		lock.writeLock().lock();
 		boolean updtFlg = false;
@@ -104,12 +119,19 @@ public class Scoreboard {
 		return updtFlg;
 	}
 
+	/**
+	 * Use to get the current state of scoreboard
+	 * 
+	 * @return Set<Game>
+	 */
 	public Set<Game> get() {
+		lock.readLock().lock();
 		Set<Game> temp = new LinkedHashSet<>();
 		scores.forEach(a -> {
 			temp.add(a);
 		});
 		System.out.println(temp);
+		lock.readLock().unlock();
 		return temp;
 	}
 

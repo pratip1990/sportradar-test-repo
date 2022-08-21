@@ -64,9 +64,17 @@ public class GameBuilder {
 		return game;
 	}
 
-	private Game finishGame(Game game) {
-		// TODO Auto-generated method stub
-		return null;
+	private Game finishGame(Game game) throws GameCreatationException {
+		Set<Game> scores = Scoreboard.getInstance().get();
+		if (scores.contains(game)) {
+			game = scores.stream().filter(a -> a.equals(new Game(this.homeTeam, this.awayTeam))).findAny()
+					.orElse(null);
+			game.setStatus(GameStatus.FINISH);
+			game.setUpdateTime(LocalDateTime.now());
+		} else {
+			throw new GameCreatationException("GameCreatationException : this game is not yet started");
+		}
+		return game;
 	}
 
 	private Game inProgressGame(Game game) throws GameCreatationException {
