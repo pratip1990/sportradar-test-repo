@@ -69,9 +69,24 @@ public class GameBuilder {
 		return null;
 	}
 
-	private Game inProgressGame(Game game) {
-		// TODO Auto-generated method stub
-		return null;
+	private Game inProgressGame(Game game) throws GameCreatationException {
+		Set<Game> scores = Scoreboard.getInstance().get();
+		if (scores.contains(game)) {
+			game = scores.stream().filter(a -> a.equals(new Game(this.homeTeam, this.awayTeam))).findAny()
+					.orElse(null);
+			if (null != game && (this.homeScore > 0 || this.awayScore > 0)) {
+				game.getHome().setScore(this.homeScore);
+				game.getAway().setScore(this.awayScore);
+				game.setTotalScore(game.getHome().getScore() + game.getAway().getScore());
+				game.setUpdateTime(LocalDateTime.now());
+				game.setStatus(GameStatus.IN_PROGRESS);
+			} else {
+				throw new GameCreatationException("GameCreatationException : invalid scores");
+			}
+		} else {
+			throw new GameCreatationException("GameCreatationException : this game is not yet started");
+		}
+		return game;
 	}
 
 	private void startGame(Game game) throws GameCreatationException {

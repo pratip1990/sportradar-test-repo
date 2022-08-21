@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.ph.scoreboardlib.core.game.Game;
 import com.ph.scoreboardlib.core.game.GameStatus;
@@ -19,12 +20,13 @@ import com.ph.scoreboardlib.core.game.util.GameUtil;
 public class Scoreboard {
 	private static Scoreboard scoreboard;
 	private TreeSet<Game> scores;
-	
+	private ReentrantReadWriteLock lock;
 	
 	private Scoreboard() {
 		Comparator<Game> gameComparator = Comparator.comparing(Game::getTotalScore).thenComparing(Game::getUpdateTime)
 				.reversed();
 		scores = new TreeSet<>(gameComparator);
+		lock = new ReentrantReadWriteLock();
 	}
 
 	/***
@@ -86,9 +88,20 @@ public class Scoreboard {
 		return false;
 	}
 	
-	private boolean updateScoreboard(GameStatus start, Game game) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean updateScoreboard(GameStatus gameStatus, Game game) {
+		lock.writeLock().lock();
+		boolean updtFlg = false;
+		if (GameStatus.FINISH == gameStatus) {
+			scores.remove(game);
+			System.out.println("Game Removed");
+			updtFlg = true;
+		} else if (GameStatus.FINISH != gameStatus) {
+			scores.add(game);
+			System.out.println("Game Add or Updated in Scoreboard");
+			updtFlg = true;
+		}
+		lock.writeLock().unlock();
+		return updtFlg;
 	}
 
 	public Set<Game> get() {
