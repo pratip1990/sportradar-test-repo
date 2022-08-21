@@ -58,7 +58,7 @@ public class Scoreboard {
 		if (validGameFlg && GameStatus.START == game.getStatus()) {
 			game.setStatus(GameStatus.START);
 			updtFlg = updateScoreboard(GameStatus.START, game);
-			System.out.println("Game is updated with the new score");
+			System.out.println("A new Game is created");
 		} else {
 			System.out.println("Invalid Game Details please check");
 		}

@@ -29,27 +29,45 @@ public class GameBuilder {
 		this.status = GameStatus.START;
 	}
 	
+	/**
+	 * Set Game status
+	 * @param GameStatus 
+	 * @return GameBuilder
+	 */
 	public GameBuilder status(GameStatus status) {
 		this.status = status;
 		return this;
 	}
 	
+	/**
+	 * @param homeScore with int value
+	 * @return GameBuilder
+	 */
 	public GameBuilder homeScore(int homeScore) {
 		this.homeScore = homeScore;
 		return this;
 	}
 
+	/**
+	 * @param awayScore with int value
+	 * @return GameBuilder
+	 */
 	public GameBuilder awayScore(int awayScore) {
 		this.awayScore = awayScore;
 		return this;
 	}
 
+	/**
+	 * Create Game Object with all conf
+	 * @return Game
+	 * @throws GameCreatationException
+	 */
 	public Game build() throws GameCreatationException {
 		Game game = null;
 		if (null != this.homeTeam && null != this.awayTeam) {
 			game = new Game(this.homeTeam, this.awayTeam);
 			if (GameStatus.START == this.status) {
-				startGame(game);
+				game = startGame(game);
 			} else if (GameStatus.IN_PROGRESS == this.status) {
 				game = inProgressGame(game);
 			} else if (GameStatus.FINISH == this.status) {
@@ -97,16 +115,22 @@ public class GameBuilder {
 		return game;
 	}
 
-	private void startGame(Game game) throws GameCreatationException {
+	private Game startGame(Game game) throws GameCreatationException {
 		Set<Game> scores = Scoreboard.getInstance().get();
 		if (!scores.contains(game)) {
 			game.setStartTime(LocalDateTime.now());
 			game.setUpdateTime(game.getUpdateTime());
 			game.setStatus(GameStatus.START);
+			if(this.homeScore > 0) {
+				game.getHome().setScore(this.homeScore);
+			}
+			if(this.awayScore > 0) {
+				game.getAway().setScore(this.awayScore);
+			}
 			game.setTotalScore(game.getHome().getScore() + game.getAway().getScore());
 		} else {
 			throw new GameCreatationException("GameCreatationException : this game is not yet started");
 		}
-		
+		return game;
 	}
 }

@@ -78,6 +78,6 @@ public class Game {
 		if (getClass() != obj.getClass())
 			return false;
 		Game other = (Game) obj;
-		return Objects.equals(away, other.away) || Objects.equals(home, other.home);
+		return Objects.equals(home, other.home) || Objects.equals(away, other.away) ;
 	}
 }
