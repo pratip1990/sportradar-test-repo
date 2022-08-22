@@ -90,7 +90,7 @@ public class GameBuilder {
 			game.setStatus(GameStatus.FINISH);
 			game.setUpdateTime(LocalDateTime.now());
 		} else {
-			throw new GameCreatationException("GameCreatationException : this game is not yet started");
+			throw new GameCreatationException("GameCreatationException : this game is not started yet : "+ game);
 		}
 		return game;
 	}
@@ -110,7 +110,7 @@ public class GameBuilder {
 				throw new GameCreatationException("GameCreatationException : invalid scores");
 			}
 		} else {
-			throw new GameCreatationException("GameCreatationException : this game is not yet started");
+			throw new GameCreatationException("GameCreatationException : this game is not started yet : "+ game);
 		}
 		return game;
 	}
@@ -129,7 +129,7 @@ public class GameBuilder {
 			}
 			game.setTotalScore(game.getHome().getScore() + game.getAway().getScore());
 		} else {
-			throw new GameCreatationException("GameCreatationException : this game is not yet started");
+			throw new GameCreatationException("GameCreatationException : this game is yet started : "+ game);
 		}
 		return game;
 	}

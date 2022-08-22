@@ -4,10 +4,12 @@
 package com.ph.scoreboardlib.core.scoreboard;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 import com.ph.scoreboardlib.core.game.Game;
 import com.ph.scoreboardlib.core.game.GameStatus;
@@ -19,13 +21,13 @@ import com.ph.scoreboardlib.core.game.util.GameUtil;
  */
 public class Scoreboard {
 	private static Scoreboard scoreboard;
-	private TreeSet<Game> scores;
+	private Set<Game> scores;
 	private ReentrantReadWriteLock lock;
+	Comparator<Game> gameComparator;
 
 	private Scoreboard() {
-		Comparator<Game> gameComparator = Comparator.comparing(Game::getTotalScore).thenComparing(Game::getUpdateTime)
-				.reversed();
-		scores = new TreeSet<>(gameComparator);
+		gameComparator = Comparator.comparing(Game::getTotalScore).reversed();
+		scores = new HashSet<>();
 		lock = new ReentrantReadWriteLock();
 	}
 
@@ -58,7 +60,7 @@ public class Scoreboard {
 		if (validGameFlg && GameStatus.START == game.getStatus()) {
 			game.setStatus(GameStatus.START);
 			updtFlg = updateScoreboard(GameStatus.START, game);
-			System.out.println("A new Game is created");
+			System.out.println("A new Game is created : " + game);
 		} else {
 			System.out.println("Invalid Game Details please check");
 		}
@@ -77,9 +79,9 @@ public class Scoreboard {
 		if (validGameFlg && GameStatus.FINISH != game.getStatus()) {
 			game.setStatus(GameStatus.IN_PROGRESS);
 			updtFlg = updateScoreboard(GameStatus.IN_PROGRESS, game);
-			System.out.println("Game is updated with the new score");
+			System.out.println("Game is updated with the new score : "+ game);
 		} else {
-			System.out.println("Can not update the START Game Status");
+			System.out.println("Invalid Game Details please check");
 		}
 		return updtFlg;
 	}
@@ -108,11 +110,11 @@ public class Scoreboard {
 		boolean updtFlg = false;
 		if (GameStatus.FINISH == gameStatus) {
 			scores.remove(game);
-			System.out.println("Game Removed");
+			//System.out.println("Game Removed");
 			updtFlg = true;
 		} else if (GameStatus.FINISH != gameStatus) {
 			scores.add(game);
-			System.out.println("Game Add or Updated in Scoreboard");
+			//System.out.println("Game Add or Updated in Scoreboard");
 			updtFlg = true;
 		}
 		lock.writeLock().unlock();
@@ -130,9 +132,13 @@ public class Scoreboard {
 		scores.forEach(a -> {
 			temp.add(a);
 		});
-		System.out.println(temp);
 		lock.readLock().unlock();
 		return temp;
+	}
+	
+	public void summary() {
+		List<Game> temp = scores.stream().sorted(gameComparator).collect(Collectors.toList());
+		temp.forEach(a -> System.out.println(a));
 	}
 
 }

@@ -3,7 +3,7 @@
  */
 package com.ph.scoreboardlib.core.game.util;
 
-import java.util.TreeSet;
+import java.util.Set;
 
 import com.ph.scoreboardlib.core.game.Game;
 import com.ph.scoreboardlib.core.game.GameStatus;
@@ -20,7 +20,7 @@ public class GameUtil {
 	 * @param game
 	 * @return boolean
 	 */
-	public static boolean validateGameForCreate(TreeSet<Game> scores, Game game) {
+	public static boolean validateGameForCreate(Set<Game> scores, Game game) {
 		if(null == game) {
 			System.out.println("Invalid Game: Game is not instantiated");
 			return false;
@@ -37,7 +37,7 @@ public class GameUtil {
 	 * @param game
 	 * @return boolean
 	 */
-	public static boolean validateGameForUpdate(TreeSet<Game> scores, Game game) {
+	public static boolean validateGameForUpdate(Set<Game> scores, Game game) {
 		if(null == game) {
 			System.out.println("Invalid Game: Game is not instantiated");
 			return false;
@@ -57,7 +57,7 @@ public class GameUtil {
 	 * @param game
 	 * @return boolean
 	 */
-	public static boolean validateGameForFinish(TreeSet<Game> scores, Game game) {
+	public static boolean validateGameForFinish(Set<Game> scores, Game game) {
 		if(null == game) {
 			System.out.println("Invalid Game: Game is not instantiated");
 			return false;
